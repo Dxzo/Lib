@@ -14,7 +14,6 @@ namespace Consola
     {
         static void Main(string[] args)
         {
-            
             string linea = string.Empty;
             int a = 0;
             try
@@ -22,12 +21,14 @@ namespace Consola
                 DataAccessSqlServer data = new DataAccessSqlServer();
                 string nombreSp = "SP_SUNAT_INSERTAR_CONTRIBUYENTE";
 
-                using (var sr = new StreamReader(@"C:\Users\KENYI\Desktop\Sunat_api\test.txt", Encoding.UTF8))
+                using (var sr = new StreamReader(@"C:\Users\KENYI\Desktop\Sunat_api\padron_reducido_ruc.txt", Encoding.UTF8))
                 {
-                    while((linea = sr.ReadLine()) != null)
+                    while ((linea = sr.ReadLine()) != null)
                     {
                         var campos = linea.Split('|');
 
+                        if (campos[0] == "10084716303")
+                            break;
                         IDictionary<string, object> parametros = new Dictionary<string, object>
                         {
                             { "@RUC", campos[0] },
@@ -50,6 +51,8 @@ namespace Consola
                         a = data.EjecutarComando(nombreSp, parametros);
                     }
                 }
+
+                Console.WriteLine("Finalizo ");
                 Console.ReadLine();
             }
             catch (Exception e)

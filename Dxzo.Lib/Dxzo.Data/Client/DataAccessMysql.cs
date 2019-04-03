@@ -144,10 +144,8 @@ namespace Dxzo.Data.Client
                 _conexion.Dispose();
             }
 
-            _conexion = null;
             _lector = null;
             _comando = null;
-            _cadenaConexion = null;
         }
     }
 }
