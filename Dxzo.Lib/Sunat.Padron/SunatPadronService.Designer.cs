@@ -1,4 +1,4 @@
-﻿namespace Sunat.Padron
+﻿namespace Dxzo.Services
 {
     partial class SunatPadronService
     {

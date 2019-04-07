@@ -70,6 +70,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dxzo.Core\Dxzo.Core.csproj">
+      <Project>{96d8f3ad-27c6-4866-8745-e88d4f45f204}</Project>
+      <Name>Dxzo.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dxzo.Data\Dxzo.Data.csproj">
       <Project>{f1410a03-d37a-40b4-a5e7-534da67a5f38}</Project>
       <Name>Dxzo.Data</Name>

@@ -3,6 +3,7 @@ using System.Data;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using System.Configuration;
+using Dxzo.Data.Utilities;
 
 namespace Dxzo.Data.Client
 {
@@ -17,16 +18,20 @@ namespace Dxzo.Data.Client
         private DataTable _datos;
         private int _afectadas;
 
-        public DataAccessMySql()
+        private Log _log;
+
+        public DataAccessMySql(string nombreConexionString = "MySql")
         {
             try
             {
-                _cadenaConexion = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
+                _cadenaConexion = ConfigurationManager.ConnectionStrings[nombreConexionString].ConnectionString;
                 _conexion = new MySqlConnection();
+
+                _log = new Log();
             }
             catch (Exception e)
             {
-                //Log.Debug(e.Message, e.ToString());
+                _log.Debug(e.Message);
                 Dispose();
             }
         }
@@ -52,7 +57,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                //Log.Debug(e.Message, e.ToString());
+                _log.Debug(e.Message);
                 return null;
             }
             finally
@@ -87,7 +92,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                //Log.Debug(e.Message, e.ToString());
+                _log.Debug(e.Message);
                 return null;
             }
             finally
@@ -95,6 +100,9 @@ namespace Dxzo.Data.Client
                 Dispose();
             }
         }
+        /// <summary>
+        ///     Ejecucion de un comando que devuelve el numero de registros afectados.
+        /// </summary>
         public override int EjecutarComando(string nombreSp, IDictionary<string, object> parametros)
         {
             try
@@ -117,7 +125,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                //Log.Debug(e.Message, e.ToString());
+                _log.Debug(e.Message);
                 return 0;
             }
             finally

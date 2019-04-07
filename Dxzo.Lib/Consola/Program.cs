@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using Dxzo.Data.Client;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net.Mail;
+using System.Globalization;
+using System.Data;
+using Dxzo.Data.Utilities;
+using Dxzo.Core.Services;
 
 namespace Consola
 {
@@ -14,50 +19,34 @@ namespace Consola
     {
         static void Main(string[] args)
         {
-            string linea = string.Empty;
-            int a = 0;
+
+            Encoding _encoding = Encoding.GetEncoding(ConfigurationManager.AppSettings["encoding"]);
+            string _culture = ConfigurationManager.AppSettings["culture"];
+            string _day = ConfigurationManager.AppSettings["day"];
+            string _time = ConfigurationManager.AppSettings["time"];
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(_culture);
+            System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(_culture);
+
             try
             {
-                DataAccessSqlServer data = new DataAccessSqlServer();
-                string nombreSp = "SP_SUNAT_INSERTAR_CONTRIBUYENTE";
-
-                using (var sr = new StreamReader(@"C:\Users\KENYI\Desktop\Sunat_api\padron_reducido_ruc.txt", Encoding.UTF8))
+                if (Enum.TryParse(_day, out DayOfWeek day))
                 {
-                    while ((linea = sr.ReadLine()) != null)
+                    if (DateTime.Now.DayOfWeek == day)
                     {
-                        var campos = linea.Split('|');
-
-                        if (campos[0] == "10084716303")
-                            break;
-                        IDictionary<string, object> parametros = new Dictionary<string, object>
+                        var time = TimeSpan.Parse(_time);
+                        if (DateTime.Now.Hour == time.Hours && DateTime.Now.Minute == time.Minutes)
                         {
-                            { "@RUC", campos[0] },
-                            { "@NOMBRE_RAZON_SOCIAL", campos[1] },
-                            { "@ESTADO_CONTRIBUYENTE", campos[2] },
-                            { "@CONDICION_DOMICILIO", campos[3] },
-                            { "@UBIGEO", campos[4] },
-                            { "@TIPO_VIA", campos[5] },
-                            { "@NOMBRE_VIA", campos[6] },
-                            { "@CODIGO_ZONA", campos[7] },
-                            { "@TIPO_ZONA", campos[8] },
-                            { "@NUMERO", campos[9] },
-                            { "@INTERIOR", campos[10] },
-                            { "@LOTE", campos[11] },
-                            { "@DEPARTAMENTO", campos[12] },
-                            { "@MANZANA", campos[13] },
-                            { "@KILOMETRO", campos[14] }
-                        };
-
-                        a = data.EjecutarComando(nombreSp, parametros);
+                            LecturaArchivo.Leer(_encoding);
+                        }
                     }
                 }
-
+                
                 Console.WriteLine("Finalizo ");
                 Console.ReadLine();
             }
             catch (Exception e)
             {
-                
             }       
         }
     }
