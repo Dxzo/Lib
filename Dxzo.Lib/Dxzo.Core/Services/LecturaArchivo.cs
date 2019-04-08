@@ -55,6 +55,7 @@ namespace Dxzo.Core.Services
                 {
                     string linea = null;
 
+                    sr.ReadLine();
                     _log.Debug("- Comienza la lectura del archivo.");
 
                     while ((linea = sr.ReadLine()) != null)

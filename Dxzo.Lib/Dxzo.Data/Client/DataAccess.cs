@@ -9,7 +9,12 @@ namespace Dxzo.Data.Client
         public ICollection<T> EjecutarConsulta<T>(string nombreSp, IDictionary<string, object> parametros) where T : class, new()
         {
             var datos = EjecutarConsulta(nombreSp, parametros);
-            if (!(datos.Rows.Count > 0))
+
+            if (datos != null)
+            {
+                if (!(datos.Rows.Count > 0))
+                    return null;
+            } else
                 return null;
 
             try
