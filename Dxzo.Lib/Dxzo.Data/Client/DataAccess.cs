@@ -45,6 +45,7 @@ namespace Dxzo.Data.Client
         public abstract DataTable EjecutarConsulta(string consulta);
         public abstract DataTable EjecutarConsulta(string nombreSp, IDictionary<string, object> parametros);
         public abstract int EjecutarComando(string nombreSp, IDictionary<string, object> parametros);
+        public abstract object EjecutarConsultaScalar(string nombreSp, IDictionary<string, object> parametros);
         public abstract void Dispose();
     }
 }

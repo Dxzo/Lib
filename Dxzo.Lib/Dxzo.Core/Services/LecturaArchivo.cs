@@ -17,11 +17,12 @@ namespace Dxzo.Core.Services
         public static bool Leer(Encoding codificacion)
         {
             string archivo = null;
-            string nombreArchio = null;
+            string nombreArchivo = null;
             string desposito = null;
             string error = null;
             string procesado = null;
             string extension = null;
+            bool resultado = false;
 
             var dic = Parametros.ObtenerParametros(Servicios.RucSunat);
 
@@ -41,7 +42,7 @@ namespace Dxzo.Core.Services
                 try
                 {
                     archivo = Directory.GetFiles(desposito, extension, SearchOption.TopDirectoryOnly).First();
-                    nombreArchio = Path.GetFileName(archivo);
+                    nombreArchivo = Path.GetFileName(archivo);
                 }
                 catch { return false; }
             } else
@@ -57,6 +58,8 @@ namespace Dxzo.Core.Services
 
                     sr.ReadLine();
                     _log.Debug("- Comienza la lectura del archivo.");
+
+                    EstablecerFase(Estados.EnProceso, nombreArchivo);
 
                     while ((linea = sr.ReadLine()) != null)
                     {
@@ -84,15 +87,23 @@ namespace Dxzo.Core.Services
                         _data.EjecutarComando(nombreSp, parametros);
                     }
                     _log.Debug("- Termino la lectura del archivo.");
+
+                    EstablecerFase(Estados.Procesado, nombreArchivo);
                 }
 
-                MoverArchivo(archivo, procesado, nombreArchio);
+                resultado = MoverArchivo(archivo, procesado, nombreArchivo);
+                _log.Debug($"- Intentando mover archivo, resultado: {resultado}");
+
                 return true;
             }
             catch (Exception e)
             {
-                MoverArchivo(archivo, error, nombreArchio);
-                _log.Debug(e.Message);
+                EstablecerFase(Estados.Error, nombreArchivo);
+
+                resultado = MoverArchivo(archivo, error, nombreArchivo);
+                _log.Debug($"- Intentando mover archivo, resultado: {resultado}");
+
+                _log.Debug($"- {e.Message}");
                 return false;
             }
         }
@@ -107,9 +118,20 @@ namespace Dxzo.Core.Services
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Debug($"- {e.Message}");
                 return false;
             }
+        }
+        public static void EstablecerFase(Estados estado, string nombreArchivo)
+        {
+            string nombreSp = "SP_API_SUNAT_CARGA_FASES";
+            IDictionary<string, object> parametros = new Dictionary<string, object>
+            {
+                { "@ESTADO", estado},
+                { "@NOMBRE_ARCHIVO", nombreArchivo }
+            };
+
+            _data.EjecutarComando(nombreSp, parametros);
         }
     }
 }

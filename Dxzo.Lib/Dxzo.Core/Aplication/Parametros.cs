@@ -27,4 +27,10 @@ namespace Dxzo.Core.Aplication
     {
         RucSunat = 1
     }
+    public enum Estados
+    {
+        EnProceso = 1,
+        Error = 2,
+        Procesado = 3
+    }
 }

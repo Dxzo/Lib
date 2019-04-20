@@ -134,6 +134,37 @@ namespace Dxzo.Data.Client
             }
         }
         /// <summary>
+		///     Ejecucion de un procedimiento almacenado con parametros que devuelve la primera columna de la primera fila en un object, listo para ser casteado al tipo requerido.
+		/// </summary>
+        public override object EjecutarConsultaScalar(string nombreSp, IDictionary<string, object> parametros)
+        {
+            try
+            {
+                _conexion.ConnectionString = _cadenaConexion;
+                _conexion.Open();
+
+                _comando = _conexion.CreateCommand();
+                _comando.CommandText = nombreSp;
+                _comando.CommandType = CommandType.StoredProcedure;
+
+                foreach (var param in parametros)
+                {
+                    _comando.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                return _comando.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                _log.Debug(e.Message);
+                return null;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+        /// <summary>
 		///     Liberar los recursos utilizados.
 		/// </summary>
         public override void Dispose()
