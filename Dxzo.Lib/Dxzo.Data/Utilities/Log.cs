@@ -28,7 +28,7 @@ namespace Dxzo.Data.Utilities
                     using (var sw = new StreamWriter(_path, true))
                     {
                         sw.WriteLine(
-                            value: string.Format("{0}|{1}", DateTime.Now.ToString(), message)
+                            value: string.Format("{0}|Data|{1}", DateTime.Now.ToString(), message)
                         );
                     }
                 }

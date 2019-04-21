@@ -9,7 +9,7 @@ namespace Dxzo.Data.Client
 {
     public sealed class DataAccessMySql : DataAccess
     {
-        private string _cadenaConexion;
+        private readonly string _cadenaConexion;
 
         private MySqlConnection _conexion;
         private MySqlCommand _comando;

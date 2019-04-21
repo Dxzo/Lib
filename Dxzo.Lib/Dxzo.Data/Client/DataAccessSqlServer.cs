@@ -9,7 +9,7 @@ namespace Dxzo.Data.Client
 {
     public sealed class DataAccessSqlServer : DataAccess
     {
-        private string _cadenaConexion;
+        private readonly string _cadenaConexion;
 
         private SqlConnection _conexion;
         private SqlCommand _comando;

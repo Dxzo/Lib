@@ -63,7 +63,7 @@ namespace Dxzo.Core.Services
 
                     while ((linea = sr.ReadLine()) != null)
                     {
-                        var campos = linea.Split('|');
+                        var campos = linea.Split('|').Select(v => v.Replace("'", "''")).ToArray();
 
                         IDictionary<string, object> parametros = new Dictionary<string, object>
                         {
@@ -131,7 +131,7 @@ namespace Dxzo.Core.Services
                 { "@NOMBRE_ARCHIVO", nombreArchivo }
             };
 
-            _data.EjecutarComando(nombreSp, parametros);
+            var x = _data.EjecutarComando(nombreSp, parametros);
         }
     }
 }
