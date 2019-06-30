@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // La información general de un ensamblado se controla mediante el siguiente 
@@ -32,5 +31,5 @@ using System.Runtime.InteropServices;
 // Puede especificar todos los valores o usar los números de compilación y de revisión predeterminados
 // mediante el carácter "*", como se muestra a continuación:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.2")]
+[assembly: AssemblyFileVersion("1.0.0.2")]

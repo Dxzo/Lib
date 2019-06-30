@@ -1,31 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Collections.Generic;
 using Dxzo.Data.Utilities;
 
 namespace Dxzo.Data.Client
 {
-    public sealed class DataAccessSqlServer : DataAccess
+    public sealed class SqlServerDataAccess : DataAccess
     {
-        private readonly string _cadenaConexion;
+        private readonly string _connectionString;
+    
+        private SqlConnection _connection;
+        private SqlCommand _command;
+        private SqlDataReader _reader;
 
-        private SqlConnection _conexion;
-        private SqlCommand _comando;
-        private SqlDataReader _lector;
-
-        private DataTable _datos;
-        private int _afectadas;
+        private DataTable _data;
+        private int _affected;
 
         private Log _log;
 
-        public DataAccessSqlServer(string nombreConexionString = "SqlServer")
+        public SqlServerDataAccess(string connectionStringName = "SqlServer")
         {
             try
             {
-                _cadenaConexion = ConfigurationManager.ConnectionStrings[nombreConexionString].ConnectionString;
-                _conexion = new SqlConnection();
+                _connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+                _connection = new SqlConnection();
 
                 _log = new Log();
             }
@@ -38,22 +38,22 @@ namespace Dxzo.Data.Client
         /// <summary>
 		///     Ejecucion de una consulta simple, sin parametros.
 		/// </summary>
-        public override DataTable EjecutarConsulta(string consulta)
+        public override DataTable ExecuteQuery(string sentence)
         {
             try
             {
-                _conexion.ConnectionString = _cadenaConexion;
-                _conexion.Open();
+                _connection.ConnectionString = _connectionString;
+                _connection.Open();
 
-                _comando = _conexion.CreateCommand();
-                _comando.CommandText = consulta;
-                _comando.CommandType = CommandType.Text;
+                _command = _connection.CreateCommand();
+                _command.CommandText = sentence;
+                _command.CommandType = CommandType.Text;
 
-                _lector = _comando.ExecuteReader();
-                _datos = new DataTable();
-                _datos.Load(_lector);
+                _reader = _command.ExecuteReader();
+                _data = new DataTable();
+                _data.Load(_reader);
 
-                return _datos;
+                return _data;
             }
             catch (Exception e)
             {
@@ -68,27 +68,27 @@ namespace Dxzo.Data.Client
         /// <summary>
 		///     Ejecucion de un procedimiento almacenado con parametros que devuelve uno o más registros.
 		/// </summary>
-        public override DataTable EjecutarConsulta(string nombreSp, IDictionary<string, object> parametros)
+        public override DataTable ExecuteQuery(string storeProcedureName, IDictionary<string, object> parameters)
         {
             try
             {
-                _conexion.ConnectionString = _cadenaConexion;
-                _conexion.Open();
+                _connection.ConnectionString = _connectionString;
+                _connection.Open();
 
-                _comando = _conexion.CreateCommand();
-                _comando.CommandText = nombreSp;
-                _comando.CommandType = CommandType.StoredProcedure;
+                _command = _connection.CreateCommand();
+                _command.CommandText = storeProcedureName;
+                _command.CommandType = CommandType.StoredProcedure;
 
-                foreach (var param in parametros)
+                foreach (var param in parameters)
                 {
-                    _comando.Parameters.AddWithValue(param.Key, param.Value);
+                    _command.Parameters.AddWithValue(param.Key, param.Value);
                 }
 
-                _lector = _comando.ExecuteReader();
-                _datos = new DataTable();
-                _datos.Load(_lector);
+                _reader = _command.ExecuteReader();
+                _data = new DataTable();
+                _data.Load(_reader);
 
-                return _datos;
+                return _data;
             }
             catch (Exception e)
             {
@@ -103,25 +103,25 @@ namespace Dxzo.Data.Client
         /// <summary>
         ///     Ejecucion de un comando que devuelve el numero de registros afectados.
         /// </summary>
-        public override int EjecutarComando(string nombreSp, IDictionary<string, object> parametros)
+        public override int ExecuteCommand(string storeProcedureName, IDictionary<string, object> parameters)
         {
             try
             {
-                _conexion.ConnectionString = _cadenaConexion;
-                _conexion.Open();
+                _connection.ConnectionString = _connectionString;
+                _connection.Open();
 
-                _comando = _conexion.CreateCommand();
-                _comando.CommandText = nombreSp;
-                _comando.CommandType = CommandType.StoredProcedure;
+                _command = _connection.CreateCommand();
+                _command.CommandText = storeProcedureName;
+                _command.CommandType = CommandType.StoredProcedure;
 
-                foreach (var param in parametros)
+                foreach (var param in parameters)
                 {
-                    _comando.Parameters.AddWithValue(param.Key, param.Value);
+                    _command.Parameters.AddWithValue(param.Key, param.Value);
                 }
 
-                _afectadas = _comando.ExecuteNonQuery();
+                _affected = _command.ExecuteNonQuery();
 
-                return _afectadas;
+                return _affected;
             }
             catch (Exception e)
             {
@@ -136,23 +136,23 @@ namespace Dxzo.Data.Client
         /// <summary>
 		///     Ejecucion de un procedimiento almacenado con parametros que devuelve la primera columna de la primera fila en un object, listo para ser casteado al tipo requerido.
 		/// </summary>
-        public override object EjecutarConsultaScalar(string nombreSp, IDictionary<string, object> parametros)
+        public override object ExecuteCommandScalar(string storeProcedureName, IDictionary<string, object> parameters)
         {
             try
             {
-                _conexion.ConnectionString = _cadenaConexion;
-                _conexion.Open();
+                _connection.ConnectionString = _connectionString;
+                _connection.Open();
 
-                _comando = _conexion.CreateCommand();
-                _comando.CommandText = nombreSp;
-                _comando.CommandType = CommandType.StoredProcedure;
+                _command = _connection.CreateCommand();
+                _command.CommandText = storeProcedureName;
+                _command.CommandType = CommandType.StoredProcedure;
 
-                foreach (var param in parametros)
+                foreach (var param in parameters)
                 {
-                    _comando.Parameters.AddWithValue(param.Key, param.Value);
+                    _command.Parameters.AddWithValue(param.Key, param.Value);
                 }
 
-                return _comando.ExecuteScalar();
+                return _command.ExecuteScalar();
             }
             catch (Exception e)
             {
@@ -165,26 +165,26 @@ namespace Dxzo.Data.Client
             }
         }
         /// <summary>
-		///     Liberar los recursos utilizados.
+		///     Liberar los recursos utilizados de forma manual, aunque lo hace de forma implicita.
 		/// </summary>
         public override void Dispose()
         {
-            if (_lector != null)
+            if (_reader != null)
             {
-                if (!_lector.IsClosed) _lector.Close();
-                _lector.Dispose();
+                if (!_reader.IsClosed) _reader.Close();
+                _reader.Dispose();
             }
 
-            if (_comando != null) _comando.Dispose();
+            if (_command != null) _command.Dispose();
 
-            if (_conexion != null)
+            if (_connection != null)
             {
-                if (_conexion.State == ConnectionState.Open) _conexion.Close();
-                _conexion.Dispose();
+                if (_connection.State == ConnectionState.Open) _connection.Close();
+                _connection.Dispose();
             }
 
-            _lector = null;
-            _comando = null;
+            _reader = null;
+            _command = null;
         }
     }
 }

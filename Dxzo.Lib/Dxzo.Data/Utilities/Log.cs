@@ -6,7 +6,7 @@ namespace Dxzo.Data.Utilities
 {
     public class Log
     {
-        private const string _defaultpath = @"D:\log.txt";
+        private const string _defaultPath = @"D:\log.txt";
         private static string _active;
         private static string _path;
         public Log()
@@ -15,7 +15,7 @@ namespace Dxzo.Data.Utilities
             _path = ConfigurationManager.AppSettings["log_path"];
                 
             if (_path == null)
-                _path = _defaultpath;
+                _path = _defaultPath;
             if (_active == null)
                 _active = "false";
         }

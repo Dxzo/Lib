@@ -6,46 +6,46 @@ namespace Dxzo.Data.Client
 {
     public abstract class DataAccess : IDisposable
     {
-        public ICollection<T> EjecutarConsulta<T>(string nombreSp, IDictionary<string, object> parametros) where T : class, new()
+        public ICollection<T> ExecuteQuery<T>(string storeProcedureName, IDictionary<string, object> parameters) where T : class, new()
         {
-            var datos = EjecutarConsulta(nombreSp, parametros);
+            var data = ExecuteQuery(storeProcedureName, parameters);
 
-            if (datos != null)
+            if (data != null)
             {
-                if (!(datos.Rows.Count > 0))
+                if (!(data.Rows.Count > 0))
                     return null;
             } else
                 return null;
 
             try
             {
-                IList<T> listaTemp = new List<T>();
+                IList<T> tempList = new List<T>();
 
-                foreach (DataRow reg in datos.Rows)
+                foreach (DataRow reg in data.Rows)
                 {
-                    T objeto = new T();
-                    foreach (var propiedad in objeto.GetType().GetProperties())
+                    T _object = new T();
+                    foreach (var property in _object.GetType().GetProperties())
                     {
                         try
                         {
-                            var propiedadInfo = objeto.GetType().GetProperty(propiedad.Name);
-                            propiedadInfo.SetValue(objeto, Convert.ChangeType(reg[propiedad.Name], propiedadInfo.PropertyType), null);
+                            var propertyInfo = _object.GetType().GetProperty(property.Name);
+                            propertyInfo.SetValue(_object, Convert.ChangeType(reg[property.Name], propertyInfo.PropertyType), null);
                         }
                         catch { continue; }
                     }
-                    listaTemp.Add(objeto);
+                    tempList.Add(_object);
                 }
-                return listaTemp;
+                return tempList;
             }
             catch
             {
                 return null;
             }
         }
-        public abstract DataTable EjecutarConsulta(string consulta);
-        public abstract DataTable EjecutarConsulta(string nombreSp, IDictionary<string, object> parametros);
-        public abstract int EjecutarComando(string nombreSp, IDictionary<string, object> parametros);
-        public abstract object EjecutarConsultaScalar(string nombreSp, IDictionary<string, object> parametros);
+        public abstract DataTable ExecuteQuery(string sentence);
+        public abstract DataTable ExecuteQuery(string storeProcedureName, IDictionary<string, object> parameters);
+        public abstract int ExecuteCommand(string storeProcedureName, IDictionary<string, object> parameters);
+        public abstract object ExecuteCommandScalar(string storeProcedureName, IDictionary<string, object> parameters);
         public abstract void Dispose();
     }
 }
