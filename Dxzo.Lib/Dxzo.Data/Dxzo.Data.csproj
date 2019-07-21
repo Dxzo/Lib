@@ -44,8 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\DataAccessMysql.cs" />
-    <Compile Include="Client\DataAccessSqlServer.cs" />
+    <Compile Include="Client\MySqlDataAccess.cs" />
+    <Compile Include="Client\SqlServerDataAccess.cs" />
     <Compile Include="Client\DataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Log.cs" />
