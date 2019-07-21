@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dxzo.Utilities">
+      <HintPath>..\..\..\..\..\Desktop\Librerias C#\Dxzo.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>D:\java-DBS\MySql.Data.dll</HintPath>
     </Reference>
@@ -48,8 +51,6 @@
     <Compile Include="Client\SqlServerDataAccess.cs" />
     <Compile Include="Client\DataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\Log.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,7 +3,7 @@ using System.Data;
 using System.Configuration;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
-using Dxzo.Data.Utilities;
+using Dxzo.Utilities;
 
 namespace Dxzo.Data.Client
 {
@@ -27,7 +27,7 @@ namespace Dxzo.Data.Client
                 _connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
                 _connection = new MySqlConnection();
 
-                _log = new Log();
+                _log = new Log(GetType());
             }
             catch (Exception e)
             {
