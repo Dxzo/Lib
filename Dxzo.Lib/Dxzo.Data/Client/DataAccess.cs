@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace Dxzo.Data.Client
@@ -42,10 +43,18 @@ namespace Dxzo.Data.Client
                 return null;
             }
         }
+        public Task<ICollection<T>> ExecuteQueryAsync<T>(string storeProcedureName, IDictionary<string, object> parameters) where T : class, new()
+        {
+            throw new NotImplementedException();
+        }
         public abstract DataTable ExecuteQuery(string sentence);
+        public abstract Task<DataTable> ExecuteQueryAsync(string sentence);
         public abstract DataTable ExecuteQuery(string storeProcedureName, IDictionary<string, object> parameters);
+        public abstract Task<DataTable> ExecuteQueryAsync(string storeProcedureName, IDictionary<string, object> parameters);
         public abstract int ExecuteCommand(string storeProcedureName, IDictionary<string, object> parameters);
+        public abstract Task<int> ExecuteCommandAsync(string storeProcedureName, IDictionary<string, object> parameters);
         public abstract object ExecuteCommandScalar(string storeProcedureName, IDictionary<string, object> parameters);
+        public abstract Task<object> ExecuteCommandScalarAsync(string storeProcedureName, IDictionary<string, object> parameters);
         public abstract void Dispose();
     }
 }

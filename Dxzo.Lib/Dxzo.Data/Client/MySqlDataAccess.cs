@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using Dxzo.Utilities;
+using System.Threading.Tasks;
 
 namespace Dxzo.Data.Client
 {
@@ -164,9 +165,126 @@ namespace Dxzo.Data.Client
                 Dispose();
             }
         }
+        public override async Task<DataTable> ExecuteQueryAsync(string sentence)
+        {
+            try
+            {
+                _connection.ConnectionString = _connectionString;
+                await _connection.OpenAsync();
+
+                _command = _connection.CreateCommand();
+                _command.CommandText = sentence;
+                _command.CommandType = CommandType.Text;
+
+                var dataReaderTask = _command.ExecuteReaderAsync();
+                _data = new DataTable();
+                _data.Load((MySqlDataReader) await dataReaderTask);
+
+                return _data;
+            }
+            catch (Exception e)
+            {
+                _log.Debug(e.Message);
+                return null;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+        public override async Task<DataTable> ExecuteQueryAsync(string storeProcedureName, IDictionary<string, object> parameters)
+        {
+            try
+            {
+                _connection.ConnectionString = _connectionString;
+                await _connection.OpenAsync();
+
+                _command = _connection.CreateCommand();
+                _command.CommandText = storeProcedureName;
+                _command.CommandType = CommandType.StoredProcedure;
+
+                foreach (var param in parameters)
+                {
+                    _command.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                var dataReaderTask = _command.ExecuteReaderAsync();
+                _data = new DataTable();
+                _data.Load((MySqlDataReader) await dataReaderTask);
+
+                return _data;
+            }
+            catch (Exception e)
+            {
+                _log.Debug(e.Message);
+                return null;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+        public override async Task<int> ExecuteCommandAsync(string storeProcedureName, IDictionary<string, object> parameters)
+        {
+            try
+            {
+                _connection.ConnectionString = _connectionString;
+                await _connection.OpenAsync();
+
+                _command = _connection.CreateCommand();
+                _command.CommandText = storeProcedureName;
+                _command.CommandType = CommandType.StoredProcedure;
+
+                foreach (var param in parameters)
+                {
+                    _command.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                _affected = await _command.ExecuteNonQueryAsync();
+
+                return _affected;
+            }
+            catch (Exception e)
+            {
+                _log.Debug(e.Message);
+                return 0;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
+        public override async Task<object> ExecuteCommandScalarAsync(string storeProcedureName, IDictionary<string, object> parameters)
+        {
+            try
+            {
+                _connection.ConnectionString = _connectionString;
+                await _connection.OpenAsync();
+
+                _command = _connection.CreateCommand();
+                _command.CommandText = storeProcedureName;
+                _command.CommandType = CommandType.StoredProcedure;
+
+                foreach (var param in parameters)
+                {
+                    _command.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                return _command.ExecuteScalarAsync();
+            }
+            catch (Exception e)
+            {
+                _log.Debug(e.Message);
+                return null;
+            }
+            finally
+            {
+                Dispose();
+            }
+        }
         /// <summary>
-		///     Liberar los recursos utilizados de forma manual, aunque lo hace de forma implicita.
-		/// </summary>
+        ///     Liberar los recursos utilizados de forma manual, aunque lo hace de forma implicita.
+        /// </summary>
         public override void Dispose()
         {
             if (_reader != null)
