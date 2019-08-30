@@ -2,11 +2,16 @@
 using System.Data;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Dxzo.Data.Factory;
 
-namespace Dxzo.Data.Client
+namespace Dxzo.Data.Common
 {
     public abstract class DataAccess : IDisposable
     {
+        public static DataAccessFactory Factory { get; }
+
+        public abstract void Commit();
+        public abstract void Rollback();
         public ICollection<T> ExecuteQuery<T>(string storeProcedureName, IDictionary<string, object> parameters) where T : class, new()
         {
             var data = ExecuteQuery(storeProcedureName, parameters);
