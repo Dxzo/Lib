@@ -169,39 +169,7 @@ namespace Dxzo.Data.Client
         {
             try
             {
-                if (_connection.State != ConnectionState.Open)
-                {
-                    _connection.ConnectionString = _connectionString;
-                    _connection.Open();
-                }
-
-                _command = _connection.CreateCommand();
-
-                if (Transaction)
-                {
-                    if (_transaction == null)
-                    {
-                        _transaction = _connection.BeginTransaction();
-                    }
-                    _command.Transaction = _transaction;
-                }
-
-                _command.CommandText = storeProcedureName;
-                _command.CommandType = CommandType.StoredProcedure;
-
-                foreach (var param in parameters)
-                {
-                    var parameter = _command.Parameters.AddWithValue(param.Key, param.Value);
-
-                    try
-                    {
-                        var parameterObject = (DataAccessParameter)param.Value;
-
-                        parameter.Value = parameterObject.ParameterValue;
-                        parameter.Direction = parameterObject.ParameterDirection;
-                    }
-                    catch { parameter.Direction = ParameterDirection.Input; }
-                }
+                Settings();
 
                 _affected = _command.ExecuteNonQuery();
                 CommandParameters = _command.Parameters.GetParameterValuePairs();
@@ -225,39 +193,7 @@ namespace Dxzo.Data.Client
         {
             try
             {
-                if (_connection.State != ConnectionState.Open)
-                {
-                    _connection.ConnectionString = _connectionString;
-                    _connection.Open();
-                }
-
-                _command = _connection.CreateCommand();
-
-                if (Transaction)
-                {
-                    if (_transaction == null)
-                    {
-                        _transaction = _connection.BeginTransaction();
-                    }
-                    _command.Transaction = _transaction;
-                }
-
-                _command.CommandText = storeProcedureName;
-                _command.CommandType = CommandType.StoredProcedure;
-
-                foreach (var param in parameters)
-                {
-                    var parameter = _command.Parameters.AddWithValue(param.Key, param.Value);
-
-                    try
-                    {
-                        var parameterObject = (DataAccessParameter)param.Value;
-
-                        parameter.Value = parameterObject.ParameterValue;
-                        parameter.Direction = parameterObject.ParameterDirection;
-                    }
-                    catch { parameter.Direction = ParameterDirection.Input; }
-                }
+                Settings();
 
                 var result = _command.ExecuteScalar();
                 CommandParameters = _command.Parameters.GetParameterValuePairs();
@@ -451,6 +387,51 @@ namespace Dxzo.Data.Client
             finally
             {
                 Dispose();
+            }
+        }
+        #endregion
+
+        #region Private methods
+        private void Settings() {
+            try
+            {
+                if (_connection.State != ConnectionState.Open)
+                {
+                    _connection.ConnectionString = _connectionString;
+                    _connection.Open();
+                }
+
+                _command = _connection.CreateCommand();
+
+                if (Transaction)
+                {
+                    if (_transaction == null)
+                    {
+                        _transaction = _connection.BeginTransaction();
+                    }
+                    _command.Transaction = _transaction;
+                }
+
+                _command.CommandText = storeProcedureName;
+                _command.CommandType = CommandType.StoredProcedure;
+
+                foreach (var param in parameters)
+                {
+                    var parameter = _command.Parameters.AddWithValue(param.Key, param.Value);
+
+                    try
+                    {
+                        var parameterObject = (DataAccessParameter)param.Value;
+
+                        parameter.Value = parameterObject.ParameterValue;
+                        parameter.Direction = parameterObject.ParameterDirection;
+                    }
+                    catch { parameter.Direction = ParameterDirection.Input; }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         #endregion

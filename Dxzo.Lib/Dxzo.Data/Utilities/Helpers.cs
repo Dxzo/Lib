@@ -11,7 +11,21 @@ namespace Dxzo.Data.Utilities
     {
         public static IDictionary<string, object> GetParameterValuePairs(this DbParameterCollection parameterCollection)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IDictionary<string, object> dic = new Dictionary<string, object>();
+                
+                foreach (DbParameter param in parameterCollection)
+                {
+                    dic.Add(param.ParameterName, param.Value);
+                }
+                
+                return dic;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

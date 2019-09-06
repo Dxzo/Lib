@@ -12,6 +12,7 @@ namespace Dxzo.Data.Common
 
         public abstract void Commit();
         public abstract void Rollback();
+        
         public ICollection<T> ExecuteQuery<T>(string storeProcedureName, IDictionary<string, object> parameters) where T : class, new()
         {
             var data = ExecuteQuery(storeProcedureName, parameters);
