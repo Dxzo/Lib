@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dxzo.Data.Utilities
 {
@@ -16,9 +14,7 @@ namespace Dxzo.Data.Utilities
                 IDictionary<string, object> dic = new Dictionary<string, object>();
                 
                 foreach (DbParameter param in parameterCollection)
-                {
                     dic.Add(param.ParameterName, param.Value);
-                }
                 
                 return dic;
             }

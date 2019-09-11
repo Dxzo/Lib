@@ -169,7 +169,7 @@ namespace Dxzo.Data.Client
         {
             try
             {
-                Settings();
+                Settings(storeProcedureName, parameters);
 
                 _affected = _command.ExecuteNonQuery();
                 CommandParameters = _command.Parameters.GetParameterValuePairs();
@@ -193,7 +193,7 @@ namespace Dxzo.Data.Client
         {
             try
             {
-                Settings();
+                Settings(storeProcedureName, parameters);
 
                 var result = _command.ExecuteScalar();
                 CommandParameters = _command.Parameters.GetParameterValuePairs();
@@ -392,7 +392,7 @@ namespace Dxzo.Data.Client
         #endregion
 
         #region Private methods
-        private void Settings() {
+        private void Settings(string storeProcedureName, IDictionary<string, object> parameters) {
             try
             {
                 if (_connection.State != ConnectionState.Open)
