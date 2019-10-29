@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dxzo.Utilities">
-      <HintPath>..\..\..\..\..\Desktop\Librerias C#\Dxzo.Utilities.dll</HintPath>
+      <HintPath>..\..\..\..\..\Desktop\cshap libraries\Dxzo.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>D:\java-DBS\MySql.Data.dll</HintPath>
