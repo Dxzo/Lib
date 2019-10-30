@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 
 Dxzo.Lib/Consola/*
+Dxzo.Lib/Dxzo.Data/*.nuspec
