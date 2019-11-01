@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using Dxzo.Data.Utilities;
 using Dxzo.Data.Common;
-using Dxzo.Utilities;
+using log4net;
 
 namespace Dxzo.Data.Client
 {
@@ -22,7 +22,7 @@ namespace Dxzo.Data.Client
         private DataTable _data;
         private int _affected;
 
-        private Log _log;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(MySqlDataAccess));
 
         public MySqlDataAccess(string connectionStringName = "MySql")
         {
@@ -30,12 +30,10 @@ namespace Dxzo.Data.Client
             {
                 _connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
                 _connection = new MySqlConnection();
-
-                _log = new Log(GetType());
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 Dispose();
             }
         }
@@ -109,7 +107,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return null;
             }
             finally
@@ -154,7 +152,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return null;
             }
             finally
@@ -178,7 +176,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return 0;
             }
             finally
@@ -202,7 +200,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return null;
             }
             finally
@@ -233,7 +231,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return null;
             }
             finally
@@ -275,7 +273,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return null;
             }
             finally
@@ -328,7 +326,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return 0;
             }
             finally
@@ -381,7 +379,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception e)
             {
-                _log.Debug(e.Message);
+                _log.Error(e.Message, e);
                 return null;
             }
             finally
@@ -431,6 +429,7 @@ namespace Dxzo.Data.Client
             }
             catch (Exception ex)
             {
+                _log.Error(ex.Message, ex);
                 throw ex;
             }
         }
