@@ -1,3 +1,6 @@
+using System;
+using System.Data;
+
 namespace Dxzo.Data.Common 
 {
     public abstract class DataAccessParameterType
