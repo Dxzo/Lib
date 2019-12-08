@@ -6,6 +6,7 @@ namespace Dxzo.Data.Common
     {
         public object ParameterValue { get; set; }
         public ParameterDirection ParameterDirection { get; set; }
+        public DbType ParameterDbType { get; set; }
     }
     internal class DataAccessInternalParameter : DataAccessParameter
     {

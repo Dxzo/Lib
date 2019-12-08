@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
-using Dxzo.Data.Utilities;
+using Dxzo.Data.Utility;
 using Dxzo.Data.Common;
 using log4net;
 
@@ -139,6 +139,7 @@ namespace Dxzo.Data.Client
 
                         parameter.Value = parameterObject.ParameterValue;
                         parameter.Direction = parameterObject.ParameterDirection;
+                        parameter.DbType = parameterObject.ParameterDbType;
                     }
                     catch { parameter.Direction = ParameterDirection.Input; }
                 }
@@ -260,6 +261,7 @@ namespace Dxzo.Data.Client
 
                         parameter.Value = parameterObject.ParameterValue;
                         parameter.Direction = parameterObject.ParameterDirection;
+                        parameter.DbType = parameterObject.ParameterDbType;
                     }
                     catch { parameter.Direction = ParameterDirection.Input; }
                 }
@@ -315,6 +317,7 @@ namespace Dxzo.Data.Client
 
                         parameter.Value = parameterObject.ParameterValue;
                         parameter.Direction = parameterObject.ParameterDirection;
+                        parameter.DbType = parameterObject.ParameterDbType;
                     }
                     catch { parameter.Direction = ParameterDirection.Input; }
                 }
@@ -368,6 +371,7 @@ namespace Dxzo.Data.Client
 
                         parameter.Value = parameterObject.ParameterValue;
                         parameter.Direction = parameterObject.ParameterDirection;
+                        parameter.DbType = parameterObject.ParameterDbType;
                     }
                     catch { parameter.Direction = ParameterDirection.Input; }
                 }
@@ -423,6 +427,7 @@ namespace Dxzo.Data.Client
 
                         parameter.Value = parameterObject.ParameterValue;
                         parameter.Direction = parameterObject.ParameterDirection;
+                        parameter.DbType = parameterObject.ParameterDbType;
                     }
                     catch { parameter.Direction = ParameterDirection.Input; }
                 }

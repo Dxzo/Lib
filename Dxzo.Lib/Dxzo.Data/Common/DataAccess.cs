@@ -3,11 +3,14 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Dxzo.Data.Factory;
+using log4net;
 
 namespace Dxzo.Data.Common
 {
     public abstract class DataAccess : IDisposable
     {
+        private static readonly ILog _log = LogManager.GetLogger(typeof(DataAccess));
+
         public static DataAccessFactory Factory { get; }
 
         public abstract void Commit();
@@ -38,14 +41,15 @@ namespace Dxzo.Data.Common
                             var propertyInfo = _object.GetType().GetProperty(property.Name);
                             propertyInfo.SetValue(_object, Convert.ChangeType(reg[property.Name], propertyInfo.PropertyType), null);
                         }
-                        catch { continue; }
+                        catch (Exception ex) { _log.Error(ex.Message, ex); continue; }
                     }
                     tempList.Add(_object);
                 }
                 return tempList;
             }
-            catch
+            catch (Exception ex)
             {
+                _log.Error(ex.Message, ex);
                 return null;
             }
         }

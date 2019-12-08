@@ -13,25 +13,40 @@ namespace Dxzo.Data.Common
                 ParameterDirection = ParameterDirection.Input
             };
         }
-        public static DataAccessParameter Input(object value, DataAccessParameterSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-        public static DataAccessParameter Output()
-        {
-            return new DataAccessInternalParameter
-            {
-                ParameterValue = DBNull.Value,
-                ParameterDirection = ParameterDirection.Output
-            };
-        }
-        public static DataAccessParameter InputOutput(object value)
+        public static DataAccessParameter Input(object value, DbType parameterDbType)
         {
             return new DataAccessInternalParameter
             {
                 ParameterValue = value,
-                ParameterDirection = ParameterDirection.InputOutput
+                ParameterDirection = ParameterDirection.Input,
+                ParameterDbType = parameterDbType
             };
+        }
+        public static DataAccessParameter Output(DbType parameterDbType)
+        {
+            return new DataAccessInternalParameter
+            {
+                ParameterValue = DBNull.Value,
+                ParameterDirection = ParameterDirection.Output,
+                ParameterDbType = parameterDbType
+            };
+        }
+        public static DataAccessParameter InputOutput(object value, DbType parameterDbType)
+        {
+            return new DataAccessInternalParameter
+            {
+                ParameterValue = value,
+                ParameterDirection = ParameterDirection.InputOutput,
+                ParameterDbType = parameterDbType
+            };
+        }
+        public static DataAccessParameter Input(object value, DataAccessParameterSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+        public static DataAccessParameter Output(DataAccessParameterSettings settings)
+        {
+            throw new NotImplementedException();
         }
         public static DataAccessParameter InputOutput(object value, DataAccessParameterSettings settings)
         {

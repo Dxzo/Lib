@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
+using log4net;
 
-namespace Dxzo.Data.Utilities
+namespace Dxzo.Data.Utility
 {
     public static class Helpers
     {
+        private static readonly ILog _log = LogManager.GetLogger(typeof(Helpers));
+
         public static IDictionary<string, object> GetParameterValuePairs(this DbParameterCollection parameterCollection)
         {
             try
@@ -20,6 +22,7 @@ namespace Dxzo.Data.Utilities
             }
             catch (Exception ex)
             {
+                _log.Error(ex.Message, ex);
                 return null;
             }
         }
